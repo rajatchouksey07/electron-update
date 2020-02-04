@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { UpdateService } from './desktop/update.service';
+import { version } from 'package.json';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,27 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'electron-update-demo';
+
+  public appVersion: typeof version = version;
+
+  constructor(private updateService: UpdateService) {
+    try {
+      const methodName = 'constructor()';
+      console.log(methodName);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public applicationUpdate(): void {
+    try {
+      const methodName = 'applicationUpdate()';
+      console.log(methodName);
+
+      this.updateService.applicationUpdate();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 }
