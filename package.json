@@ -1,9 +1,13 @@
 {
   "name": "electron-update-demo",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "main": "desktopMain.js",
   "description": "electron-updater example project",
   "author": "Rajat Chouksey",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rajatchouksey07/electron-update.git"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o",
@@ -12,10 +16,21 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "electron .",
+    "electron:start": "npm-run-all -p ng:serve electron:serve",
+    "electron:build": "npm run electron:serve-tsc && ng build",
+    "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve",
     "electron:compile": "tsc desktopMain.ts && electron .",
     "electron:dev": "ng build && npm run electron:compile",
     "electron:prod": "ng build --prod && npm run electron:compile",
-    "publish": "build -p always"
+    "publish": "build -p always",
+    "electron:build2": "electron-builder build --win --publish never",
+    "electron:deploy": "electron-builder build --win --publish always",
+    "clean": "del-cli dist",
+    "build-main": "cross-env NODE_ENV=production webpack --config config/webpack.electron.js --progress --profile --colors",
+    "build-renderer": "cross-env NODE_ENV=production webpack --config config/webpack.production.js --progress --profile --colors",
+    "build2": "yarn run clean && yarn run build-main && yarn run build-renderer",
+    "dist-mac": "build --mac --x64 --ia32",
+    "dist-win": "build --win --x64 --ia32"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +42,7 @@
     "@angular/platform-browser": "~8.2.9",
     "@angular/platform-browser-dynamic": "~8.2.9",
     "@angular/router": "~8.2.9",
+    "electron-installer-windows": "^3.0.0",
     "electron-log": "^4.0.5",
     "electron-updater": "^4.2.0",
     "ngx-electron": "^2.2.0",
@@ -45,6 +61,7 @@
     "@types/node": "^8.9.5",
     "codelyzer": "^5.0.0",
     "electron": "^8.0.0",
+    "electron-builder": "^22.3.2",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
@@ -57,7 +74,15 @@
     "typescript": "~3.5.3"
   },
   "build": {
-    "appId": "com.github.rjt.electron-update-demo"
+    "appId": "com.github.rajatchouksey07.electron-update",
+    "artifactName": "rjt-setup.exe",
+    "nsis": {},
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://appdownloader.blob.core.windows.net/desktopupdater"
+      }
+    ]
   },
   "browser": {
     "fs": false,
