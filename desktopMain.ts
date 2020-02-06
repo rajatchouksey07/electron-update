@@ -9,6 +9,7 @@ function createWindow() {
     win = new BrowserWindow({
         width: 800,
         height: 600,
+        backgroundColor: '#ffffff',
         webPreferences: {
             nodeIntegration: true
         }
@@ -77,6 +78,7 @@ const { autoUpdater } = require('electron-updater');
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
+autoUpdater.setFeedURL('http://127.0.0.1:8080/server/ngelectron-update-rjt/');
 
 // -------------------------------------------------------------------
 // Define the menu

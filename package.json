@@ -1,13 +1,8 @@
 {
-  "name": "electron-update-demo",
+  "name": "ngelectron-update-rjt",
   "version": "0.0.1",
+  "description": "Electron Windows auto update example",
   "main": "desktopMain.js",
-  "description": "electron-updater example project",
-  "author": "Rajat Chouksey",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/rajatchouksey07/electron-update.git"
-  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o",
@@ -17,21 +12,30 @@
     "e2e": "ng e2e",
     "electron": "electron .",
     "electron:start": "npm-run-all -p ng:serve electron:serve",
-    "electron:build": "npm run electron:serve-tsc && ng build",
+    "electron:build": "npm run electron:serve-tsc && ng build --base-href ./ --win",
     "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve",
     "electron:compile": "tsc desktopMain.ts && electron .",
-    "electron:dev": "ng build && npm run electron:compile",
-    "electron:prod": "ng build --prod && npm run electron:compile",
-    "publish": "build -p always",
-    "electron:build2": "electron-builder build --win --publish never",
-    "electron:deploy": "electron-builder build --win --publish always",
-    "clean": "del-cli dist",
-    "build-main": "cross-env NODE_ENV=production webpack --config config/webpack.electron.js --progress --profile --colors",
-    "build-renderer": "cross-env NODE_ENV=production webpack --config config/webpack.production.js --progress --profile --colors",
-    "build2": "yarn run clean && yarn run build-main && yarn run build-renderer",
-    "dist-mac": "build --mac --x64 --ia32",
-    "dist-win": "build --win --x64 --ia32"
+    "electron:dev": "ng build --base-href ./ && npm run electron:compile",
+    "electron:prod": "ng build --base-href ./ --prod && npm run electron:compile",
+    "package": "electron-builder --x64",
+    "electron-tsc": "tsc desktopMain.ts && ng build --base-href ./ && electron .",
+    "electron:exe": "ng build --base-href ./ && tsc desktopMain.ts && npm run package"
   },
+  "build": {
+    "directories": {
+      "output": "./dist/ngelectron-update-rjt"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajatchouksey07/electron-update.git"
+  },
+  "keywords": [
+    "Electron",
+    "Windows",
+    "autoupdate"
+  ],
+  "author": "Rajat Chouksey",
   "private": true,
   "dependencies": {
     "@angular/animations": "~8.2.9",
@@ -62,6 +66,7 @@
     "codelyzer": "^5.0.0",
     "electron": "^8.0.0",
     "electron-builder": "^22.3.2",
+    "electron-winstaller": "^4.0.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
@@ -72,17 +77,6 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"
-  },
-  "build": {
-    "appId": "com.github.rajatchouksey07.electron-update",
-    "artifactName": "rjt-setup.exe",
-    "nsis": {},
-    "publish": [
-      {
-        "provider": "generic",
-        "url": "https://appdownloader.blob.core.windows.net/desktopupdater"
-      }
-    ]
   },
   "browser": {
     "fs": false,
